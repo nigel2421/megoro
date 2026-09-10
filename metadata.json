@@ -1,0 +1,6 @@
+{
+  "name": "MGR",
+  "description": "Gamified Merry-Go-Round / ROSCA Engine with live Mezani table seating, rotating savings pool, contribution vault, and ACID ledger.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
