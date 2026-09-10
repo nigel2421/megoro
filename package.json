@@ -2,6 +2,7 @@
   "name": "react-example",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://nigel2421.github.io/megoro",
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
