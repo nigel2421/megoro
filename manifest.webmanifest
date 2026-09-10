@@ -1,0 +1,38 @@
+{
+  "id": "/",
+  "name": "MGR — Merry-Go-Round & ROSCA Engine",
+  "short_name": "MGR",
+  "description": "Gamified Merry-Go-Round / ROSCA Engine with live Mezani table seating, rotating savings pool, contribution vault, and ACID ledger.",
+  "theme_color": "#090d16",
+  "background_color": "#090d16",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "/",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

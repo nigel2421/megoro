@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="grad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#090d16"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#eab308"/>
+      <stop offset="100%" stop-color="#ca8a04"/>
+    </linearGradient>
+    <linearGradient id="emerald" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6ee7b7"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="100" fill="url(#grad)"/>
+  <!-- Circular Merry-go-round Track -->
+  <circle cx="256" cy="256" r="160" stroke="#334155" stroke-width="12" fill="none" stroke-dasharray="16 12"/>
+  <circle cx="256" cy="256" r="160" stroke="url(#gold)" stroke-width="12" fill="none" stroke-dasharray="140 80" stroke-linecap="round"/>
+  <!-- Orbiting Member Nodes -->
+  <circle cx="256" cy="96" r="28" fill="#10b981" stroke="#ffffff" stroke-width="4"/>
+  <circle cx="395" cy="176" r="24" fill="#3b82f6" stroke="#ffffff" stroke-width="4"/>
+  <circle cx="395" cy="336" r="24" fill="#f59e0b" stroke="#ffffff" stroke-width="4"/>
+  <circle cx="256" cy="416" r="24" fill="#8b5cf6" stroke="#ffffff" stroke-width="4"/>
+  <circle cx="117" cy="336" r="24" fill="#ec4899" stroke="#ffffff" stroke-width="4"/>
+  <circle cx="117" cy="176" r="24" fill="#06b6d4" stroke="#ffffff" stroke-width="4"/>
+  <!-- Central Mezani Vault Shield -->
+  <circle cx="256" cy="256" r="76" fill="#1e1b4b" stroke="url(#gold)" stroke-width="8"/>
+  <!-- Rotating arrows / coin sign -->
+  <path d="M256 210 L256 302 M220 238 L256 210 L292 238" stroke="url(#gold)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <text x="256" y="278" font-family="system-ui, sans-serif" font-size="28" font-weight="900" fill="#fef08a" text-anchor="middle">MGR</text>
+</svg>
