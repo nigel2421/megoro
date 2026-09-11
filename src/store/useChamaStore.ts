@@ -21,6 +21,7 @@ import {
   initialLedger,
 } from '../data/seedData';
 import { sound } from '../utils/audio';
+import { apiService } from '../services/api';
 
 export type ActiveNavView = 'lobby' | 'mezani' | 'vault_payout' | 'my_acc' | 'okolea' | 'dissolution';
 
@@ -94,6 +95,9 @@ interface ChamaStore {
   // Cycle Dissolution & Reset
   auditAndDissolveCycle: (dividendRatePercent: number) => void;
   resetForNewCycle: (shareAmount: number, frequency: 'Weekly' | 'Bi-Weekly' | 'Monthly') => void;
+
+  // SQLite Persistence Sync
+  fetchDbData: () => Promise<void>;
 }
 
 export const useChamaStore = create<ChamaStore>((set, get) => ({
@@ -106,6 +110,23 @@ export const useChamaStore = create<ChamaStore>((set, get) => ({
     const next = !get().soundEnabled;
     sound.enabled = next;
     set({ soundEnabled: next });
+  },
+
+  fetchDbData: async () => {
+    try {
+      const [cycle, members, payoutTurns, meeting, loans, okoleaRequests, ledger] = await Promise.all([
+        apiService.getCycleInfo(),
+        apiService.getMembers(),
+        apiService.getPayoutTurns(),
+        apiService.getMeetingSession(),
+        apiService.getLoans(),
+        apiService.getOkoleaRequests(),
+        apiService.getLedgerEntries(),
+      ]);
+      set({ cycle, members, payoutTurns, meeting, loans, okoleaRequests, ledger });
+    } catch (err) {
+      console.warn('Backend SQLite API not available, keeping fallback initial state:', err);
+    }
   },
 
   cycle: initialCycle,

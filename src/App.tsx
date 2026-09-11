@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useChamaStore } from './store/useChamaStore';
 import { Navbar } from './components/Navbar';
 import { MezaniTable } from './components/MezaniTable';
@@ -9,7 +9,11 @@ import { CycleDissolution } from './components/CycleDissolution';
 import { OfflineIndicator } from './components/PWAInstallButton';
 
 export default function App() {
-  const { activeView } = useChamaStore();
+  const { activeView, fetchDbData } = useChamaStore();
+
+  useEffect(() => {
+    fetchDbData();
+  }, [fetchDbData]);
 
   return (
     <div className="min-h-screen bg-[#07090e] text-slate-100 flex flex-col font-sans selection:bg-amber-500 selection:text-slate-950">
