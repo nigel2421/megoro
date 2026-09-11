@@ -11,7 +11,7 @@ async function startServer() {
   initDatabase();
 
   const app = express();
-  const PORT = 3000;
+  const PORT = process.env.PORT || 3000;
 
   app.use(express.json());
 
@@ -20,7 +20,7 @@ async function startServer() {
     res.json({
       status: 'ok',
       service: 'MGR ROSCA Engine',
-      version: '1.0.0',
+      version: '2.4.0',
       database: 'SQLite (chama.db - WAL Mode)',
       timestamp: new Date().toISOString(),
     });
@@ -44,8 +44,8 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`MGR ROSCA Server running at http://0.0.0.0:${PORT}`);
+  app.listen(PORT, () => {
+    console.log(`MGR ROSCA Engine with SQLite running at http://localhost:${PORT}`);
   });
 }
 

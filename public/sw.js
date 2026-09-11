@@ -1,9 +1,9 @@
 const CACHE_NAME = 'mgr-v1';
 const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/icon.svg',
-  '/manifest.webmanifest'
+  './',
+  './index.html',
+  './icon.svg',
+  './manifest.webmanifest'
 ];
 
 self.addEventListener('install', (event) => {
@@ -40,7 +40,7 @@ self.addEventListener('fetch', (event) => {
       return fetch(event.request).catch(() => {
         // Return offline fallback if navigational
         if (event.request.mode === 'navigate') {
-          return caches.match('/index.html');
+          return caches.match('./index.html');
         }
       });
     })
