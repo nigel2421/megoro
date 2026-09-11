@@ -2,13 +2,14 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
+import { getChamaCycle, getMembers, getLedgerEntries, recordContribution } from './db';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = process.env.PORT || 3000;
 
   app.use(express.json());
 
@@ -16,24 +17,71 @@ async function startServer() {
   app.get('/api/health', (req, res) => {
     res.json({
       status: 'ok',
-      service: 'MGR ROSCA Engine',
-      version: '1.0.0',
+      service: 'MGR ROSCA SQLite Backend',
+      database: 'SQLite (cPanel / MySQL Migration Ready)',
+      version: '2.4.0',
       timestamp: new Date().toISOString(),
     });
   });
 
-  // REST API: Chama Summary & ACID-compliant Ledger Schema
+  // REST API: SQLite Chama Info
   app.get('/api/chama/info', (req, res) => {
-    res.json({
-      name: 'Ushirika Bora ROSCA 2026',
-      cycleNumber: 3,
-      currency: 'KES',
-      totalMembers: 12,
-      shareAmount: 10000,
-      fineAmount: 500,
-      payoutPool: 120000,
-      protocol: 'MGR-ACID-Ledger-v1',
-    });
+    try {
+      const cycle = getChamaCycle();
+      res.json(cycle);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // REST API: SQLite Members List
+  app.get('/api/members', (req, res) => {
+    try {
+      const members = getMembers();
+      res.json(members);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // REST API: SQLite ACID Ledger Entries
+  app.get('/api/ledger', (req, res) => {
+    try {
+      const ledger = getLedgerEntries(50);
+      res.json(ledger);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  // REST API: M-Pesa / Cash Contribution Verification (Persists into SQLite)
+  app.post('/api/contributions/verify', (req, res) => {
+    const { memberId, amount, method, reference } = req.body;
+    if (!memberId || !amount) {
+      return res.status(400).json({ error: 'Missing memberId or amount' });
+    }
+
+    try {
+      const record = recordContribution({
+        memberId,
+        amount: Number(amount),
+        method: method || 'mpesa',
+        reference,
+      });
+
+      res.json({
+        success: true,
+        transactionId: record.transactionId,
+        reference: record.reference,
+        status: 'verified_cleared_sqlite',
+        verifiedBy: 'SQLite DB Transaction / Webhook',
+        amount: record.amount,
+        currency: 'KES',
+        timestamp: record.timestamp,
+      });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
   });
 
   // REST API: Live Meeting Room State
@@ -43,26 +91,6 @@ async function startServer() {
       stage: 'live_mezani',
       seatsTotal: 12,
       activeSpeaker: 'Kiprono Bett (Chairman)',
-      timestamp: new Date().toISOString(),
-    });
-  });
-
-  // REST API: M-Pesa / Cash Payment Ingestion Simulator & Verification
-  app.post('/api/contributions/verify', (req, res) => {
-    const { memberId, amount, method, reference } = req.body;
-    if (!memberId || !amount) {
-      return res.status(400).json({ error: 'Missing memberId or amount' });
-    }
-
-    const verifiedRef = reference || (method === 'mpesa' ? `QJH${Math.floor(100000 + Math.random() * 900000)}` : `CSH-REC-${Math.floor(1000 + Math.random() * 9000)}`);
-    res.json({
-      success: true,
-      transactionId: `TXN-${Date.now().toString().slice(-5)}`,
-      reference: verifiedRef,
-      status: 'verified_cleared',
-      verifiedBy: 'M-Pesa Instant Webhook / Treasurer Counter-Sign',
-      amount,
-      currency: 'KES',
       timestamp: new Date().toISOString(),
     });
   });
@@ -102,8 +130,8 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`MGR ROSCA Server running at http://0.0.0.0:${PORT}`);
+  app.listen(PORT, () => {
+    console.log(`MGR ROSCA Engine with SQLite running at http://localhost:${PORT}`);
   });
 }
 
